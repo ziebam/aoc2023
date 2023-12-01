@@ -17,7 +17,7 @@ def part1(data):
 
 def part2(data):
     regex = "(?=(\d|one|two|three|four|five|six|seven|eight|nine))"
-    str_to_digit_map = {
+    str_to_digit = {
         "one": 1,
         "two": 2,
         "three": 3,
@@ -32,16 +32,8 @@ def part2(data):
     out = 0
     for line in data:
         matches = re.findall(regex, line)
-        out += (
-            int(matches[0]) * 10
-            if matches[0] not in str_to_digit_map.keys()
-            else str_to_digit_map[matches[0]] * 10
-        )
-        out += (
-            int(matches[-1])
-            if matches[-1] not in str_to_digit_map.keys()
-            else str_to_digit_map[matches[-1]]
-        )
+        out += int(str_to_digit.get(matches[0], matches[0])) * 10
+        out += int(str_to_digit.get(matches[-1], matches[-1]))
 
     return out
 
