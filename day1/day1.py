@@ -38,12 +38,23 @@ def part2(data):
     return out
 
 
-start = timeit.default_timer()
-part1_answer = part1(data)
-end = timeit.default_timer()
-print(f"Part 1 answer: {part1_answer}. Ran in {end - start} seconds.")
+starts = []
+ends = []
+for i in range(1000):
+    starts.append(timeit.default_timer())
+    part1_answer = part1(data)
+    ends.append(timeit.default_timer())
 
-start = timeit.default_timer()
-part2_answer = part2(data)
-end = timeit.default_timer()
-print(f"Part 2 answer: {part2_answer}. Ran in {end - start} seconds.")
+print(
+    f"Part 1 answer: {part1_answer}. Ran in {sum(ends) / len(ends) - sum(starts) / len(starts)} seconds on average."
+)
+
+starts = []
+ends = []
+for i in range(1000):
+    starts.append(timeit.default_timer())
+    part2_answer = part2(data)
+    ends.append(timeit.default_timer())
+print(
+    f"Part 2 answer: {part2(data)}. Ran in {sum(ends) / len(ends) - sum(starts) / len(starts)} seconds on average."
+)
