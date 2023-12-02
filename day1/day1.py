@@ -56,5 +56,5 @@ for i in range(1000):
     part2_answer = part2(data)
     ends.append(timeit.default_timer())
 print(
-    f"Part 2 answer: {part2(data)}. Ran in {sum(ends) / len(ends) - sum(starts) / len(starts)} seconds on average."
+    f"Part 2 answer: {part2_answer}. Ran in {sum(ends) / len(ends) - sum(starts) / len(starts)} seconds on average."
 )
