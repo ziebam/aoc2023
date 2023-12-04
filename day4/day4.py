@@ -1,4 +1,4 @@
-import timeit
+from performance_utils.performance_utils import measure_performance
 
 with open("day4/in4.txt") as in4:
     data = in4.readlines()
@@ -37,23 +37,5 @@ def part2(data):
     return sum(counts)
 
 
-starts = []
-ends = []
-for i in range(1000):
-    starts.append(timeit.default_timer())
-    part1_answer = part1(data)
-    ends.append(timeit.default_timer())
-
-print(
-    f"Part 1 answer: {part1_answer}. Ran in {sum(ends) / len(ends) - sum(starts) / len(starts)} seconds on average."
-)
-
-starts = []
-ends = []
-for i in range(1000):
-    starts.append(timeit.default_timer())
-    part2_answer = part2(data)
-    ends.append(timeit.default_timer())
-print(
-    f"Part 2 answer: {part2_answer}. Ran in {sum(ends) / len(ends) - sum(starts) / len(starts)} seconds on average."
-)
+measure_performance("part 1", part1, data)
+measure_performance("part 2", part2, data)
