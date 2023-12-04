@@ -5,6 +5,8 @@ with open("day2/in2.txt") as in2:
 
 
 def part1(data):
+    M = {"red": 12, "green": 13, "blue": 14}
+
     possible_ids = []
     for game in data:
         game_id, subgames = game.split(": ")
@@ -13,13 +15,12 @@ def part1(data):
         valid = True
         for subgame in subgames.split("; "):
             for turn in subgame.split(", "):
-                n, color = turn.split(" ")
-                if color == "red" and int(n) > 12:
+                n, color = turn.split()
+                if int(n) > M[color]:
                     valid = False
-                if color == "green" and int(n) > 13:
-                    valid = False
-                if color == "blue" and int(n) > 14:
-                    valid = False
+                    break
+            if not valid:
+                break
 
         if valid:
             possible_ids.append(id)
@@ -36,7 +37,7 @@ def part2(data):
         parsed_games[id] = {"red": 0, "green": 0, "blue": 0}
         for subgame in subgames.split("; "):
             for subsubgame in subgame.split(", "):
-                n, color = subsubgame.split(" ")
+                n, color = subsubgame.split()
 
                 if color == "red" and int(n) > parsed_games[id]["red"]:
                     parsed_games[id]["red"] = int(n)
