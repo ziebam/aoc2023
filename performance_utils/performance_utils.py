@@ -1,7 +1,7 @@
 import timeit
 
 
-def measure_performance(name, func, *args):
+def measure_performance(name, func, *args, unit="milliseconds"):
     warmup_start = timeit.default_timer()
 
     for _ in range(1000):
@@ -18,6 +18,7 @@ def measure_performance(name, func, *args):
         answer = func(*args)
         ends.append(timeit.default_timer())
 
+    m = {"milliseconds": 1000, "microseconds": 1000000, "nanoseconds": 1000000000}
     print(
-        f"{name.capitalize()} answer: \033[92m{answer}\x1b[0m. Ran 10000 times in ~{(sum(ends) / len(starts) - sum(starts) / len(starts)) * 1000:.2f} milliseconds on average.\n"
+        f"{name.capitalize()} answer: \033[92m{answer}\x1b[0m. Ran 10000 times in ~{(sum(ends) / len(starts) - sum(starts) / len(starts)) * m[unit]:.2f} {unit} on average.\n"
     )
