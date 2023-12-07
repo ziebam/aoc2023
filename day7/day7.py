@@ -12,7 +12,7 @@ STRENGTH_MAP_PART1 = {"T": 10, "J": 11, "Q": 12, "K": 13, "A": 14}
 STRENGTH_MAP_PART2 = {"T": 10, "J": 1, "Q": 12, "K": 13, "A": 14}
 
 
-def get_type_part1(hand):
+def get_rank_part1(hand):
     c = Counter(hand)
     counts = c.values()
 
@@ -37,9 +37,9 @@ def get_type_part1(hand):
     return 0
 
 
-def get_type_part2(hand):
+def get_rank_part2(hand):
     if "J" not in hand:
-        return get_type_part1(hand)
+        return get_rank_part1(hand)
 
     c = Counter(hand)
     counts = c.values()
@@ -79,19 +79,17 @@ def part1(data):
     out = 0
     for line in data:
         hand, bid = line.split()
-        strength = 0
+        current_hand = [hand, int(bid), get_rank_part1(hand)]
         for idx, card in enumerate(hand):
-            # Need to multiply by 2 since some cards values' are larger than 10,
-            # which causes an overflow to the next highest digit (e.g. from tens to
-            # hundreds), skewing the result.
-            multiplier = 10 ** ((idx - 5) * (-1) * 2)
             if card in STRENGTH_MAP_PART1:
-                strength += STRENGTH_MAP_PART1[card] * multiplier
+                current_hand.append(STRENGTH_MAP_PART1[card])
             else:
-                strength += int(card) * multiplier
-        hands.append((hand, int(bid), strength, get_type_part1(hand)))
+                current_hand.append(int(card))
+        hands.append(current_hand)
 
-    for idx, hand in enumerate(sorted(hands, key=lambda x: (x[3], x[2]))):
+    for idx, hand in enumerate(
+        sorted(hands, key=lambda x: (x[2], x[3], x[4], x[5], x[6], x[7]))
+    ):
         out += hand[1] * (idx + 1)
 
     return out
@@ -103,19 +101,17 @@ def part2(data):
     out = 0
     for line in data:
         hand, bid = line.split()
-        strength = 0
+        current_hand = [hand, int(bid), get_rank_part2(hand)]
         for idx, card in enumerate(hand):
-            # Need to multiply by 2 since some cards values' are larger than 10,
-            # which causes an overflow to the next highest digit (e.g. from tens to
-            # hundreds), skewing the result.
-            multiplier = 10 ** ((idx - 5) * (-1) * 2)
             if card in STRENGTH_MAP_PART2:
-                strength += STRENGTH_MAP_PART2[card] * multiplier
+                current_hand.append(STRENGTH_MAP_PART2[card])
             else:
-                strength += int(card) * multiplier
-        hands.append((hand, int(bid), strength, get_type_part2(hand)))
+                current_hand.append(int(card))
+        hands.append(current_hand)
 
-    for idx, hand in enumerate(sorted(hands, key=lambda x: (x[3], x[2]))):
+    for idx, hand in enumerate(
+        sorted(hands, key=lambda x: (x[2], x[3], x[4], x[5], x[6], x[7]))
+    ):
         out += hand[1] * (idx + 1)
 
     return out
