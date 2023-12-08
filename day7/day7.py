@@ -16,8 +16,8 @@ class Rank(Enum):
     FOUR_OF_A_KIND = 5
     FIVE_OF_A_KIND = 6
 
-    def __lt__(self, b):
-        return self.value < b.value
+    def __lt__(self, other):
+        return self.value < other.value
 
 
 def get_rank_without_jokers(hand):
@@ -85,7 +85,7 @@ def get_hands(data, rank_getter, strength_map):
     hands = []
     for line in data:
         hand, bid = line.split()
-        current_hand = [hand, int(bid), rank_getter(hand)]
+        current_hand = [int(bid), rank_getter(hand)]
         for card in hand:
             if card in strength_map:
                 current_hand.append(strength_map[card])
@@ -100,9 +100,9 @@ def get_winnings(hands):
     out = 0
     for idx, hand in enumerate(
         # Sorted first by rank (e.g. "three of a kind"), and then by each card starting from the first one.
-        sorted(hands, key=lambda x: (x[2], x[3], x[4], x[5], x[6], x[7]))
+        sorted(hands, key=lambda x: (x[1], x[2], x[3], x[4], x[5], x[6]))
     ):
-        out += hand[1] * (idx + 1)
+        out += hand[0] * (idx + 1)
 
     return out
 
