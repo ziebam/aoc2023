@@ -141,5 +141,5 @@ print(
     f"Part 1 answer: \033[92m{part1(data)}\x1b[0m. Too slow for performance measurement.\n"
 )
 print(
-    f"Part 1 answer: \033[92m{part2(data)}\x1b[0m. Too slow for performance measurement.\n"
+    f"Part 2 answer: \033[92m{part2(data)}\x1b[0m. Too slow for performance measurement.\n"
 )
