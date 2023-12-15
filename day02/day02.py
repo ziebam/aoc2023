@@ -1,7 +1,7 @@
 from performance_utils.performance_utils import measure_performance
 
-with open("day2/in2.txt") as in2:
-    data = [line.strip() for line in in2.readlines()]
+with open("day02/in02.txt") as in02:
+    data = [line.strip() for line in in02.readlines()]
 
 
 def part1(data):

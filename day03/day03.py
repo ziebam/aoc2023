@@ -2,8 +2,8 @@ import re
 
 from performance_utils.performance_utils import measure_performance
 
-with open("day3/in3.txt") as in3:
-    data = in3.readlines()
+with open("day03/in03.txt") as in03:
+    data = in03.readlines()
 
 
 def is_valid_part(potential_part, data):

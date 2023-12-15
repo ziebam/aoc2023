@@ -2,8 +2,8 @@ import re
 
 from performance_utils.performance_utils import measure_performance
 
-with open("day1/in1.txt") as in1:
-    data = in1.readlines()
+with open("day01/in01.txt") as in01:
+    data = in01.readlines()
 
 
 def part1(data):

@@ -2,8 +2,8 @@ from math import lcm
 
 from performance_utils.performance_utils import measure_performance
 
-with open("day8/in8.txt") as in8:
-    data = [line.strip() for line in in8.readlines()]
+with open("day08/in08.txt") as in08:
+    data = [line.strip() for line in in08.readlines()]
 
 
 def part1(data):
