@@ -1,15 +1,18 @@
 from performance_utils.performance_utils import measure_performance
 
-with open("day16/in16.txt") as in16:
-    data = [line.strip() for line in in16.readlines()]
+
+def read_input():
+    with open("day16/in16.txt") as in16:
+        data = [line.strip() for line in in16.readlines()]
+        return data
 
 
-def traverse(origin, direction, grid, energy_map, explored_paths):
+def shine_beam(origin, direction, grid, energized_tiles, explored_paths):
     xn = origin[0] + direction[0]
     yn = origin[1] + direction[1]
 
     while not ((xn >= len(grid[0]) or xn < 0) or (yn >= len(grid) or yn < 0)):
-        energy_map[yn][xn] += 1
+        energized_tiles.add((xn, yn))
         current_tile = grid[yn][xn]
 
         if current_tile == ".":
@@ -59,8 +62,8 @@ def traverse(origin, direction, grid, energy_map, explored_paths):
                     break
 
                 explored_paths.append((xn, yn, direction[0], direction[1]))
-                traverse((xn, yn), (0, -1), grid, energy_map, explored_paths)
-                traverse((xn, yn), (0, 1), grid, energy_map, explored_paths)
+                shine_beam((xn, yn), (0, -1), grid, energized_tiles, explored_paths)
+                shine_beam((xn, yn), (0, 1), grid, energized_tiles, explored_paths)
 
         else:
             if direction == (1, 0) or direction == (-1, 0):
@@ -71,78 +74,44 @@ def traverse(origin, direction, grid, energy_map, explored_paths):
                     break
 
                 explored_paths.append((xn, yn, direction[0], direction[1]))
-                traverse((xn, yn), (-1, 0), grid, energy_map, explored_paths)
-                traverse((xn, yn), (1, 0), grid, energy_map, explored_paths)
+                shine_beam((xn, yn), (-1, 0), grid, energized_tiles, explored_paths)
+                shine_beam((xn, yn), (1, 0), grid, energized_tiles, explored_paths)
+
+    return len(energized_tiles)
 
 
 def part1(grid):
-    energy_map = [[0 for _ in range(len(data[0]))] for _ in range(len(data))]
-
-    traverse((-1, 0), (1, 0), grid, energy_map, [])
-
-    out = 0
-    for row in energy_map:
-        for node in row:
-            if node > 0:
-                out += 1
-
-    return out
+    energized_tiles = set()
+    return shine_beam((-1, 0), (1, 0), grid, energized_tiles, [])
 
 
 def part2(grid):
+    # TODO: Optimization idea. Cache that stores the amount of energized tiles after hitting
+    # a splitter (`-` or `|`), reused instead of traversing the grid multiple times.
+    n_rows, n_cols = (len(grid), len(grid[0]))
+
     results = []
-    for x in range(len(data[0])):
-        energy_map = [[0 for _ in range(len(data[0]))] for _ in range(len(data))]
-        traverse((x, -1), (0, 1), grid, energy_map, [])
+    for x in range(n_cols):
+        energized_tiles = set()
+        results.append(shine_beam((x, -1), (0, 1), grid, energized_tiles, []))
 
-        result = 0
-        for row in energy_map:
-            for node in row:
-                if node > 0:
-                    result += 1
+        energized_tiles = set()
+        results.append(shine_beam((x, n_rows), (0, -1), grid, energized_tiles, []))
 
-        results.append(result)
+    for y in range(n_rows):
+        energized_tiles = set()
+        results.append(shine_beam((-1, y), (1, 0), grid, energized_tiles, []))
 
-    for x in range(len(data[0])):
-        energy_map = [[0 for _ in range(len(data[0]))] for _ in range(len(data))]
-        traverse((x, len(data)), (0, -1), grid, energy_map, [])
-
-        result = 0
-        for row in energy_map:
-            for node in row:
-                if node > 0:
-                    result += 1
-
-        results.append(result)
-
-    for y in range(len(data)):
-        energy_map = [[0 for _ in range(len(data[0]))] for _ in range(len(data))]
-        traverse((-1, y), (1, 0), grid, energy_map, [])
-
-        result = 0
-        for row in energy_map:
-            for node in row:
-                if node > 0:
-                    result += 1
-
-        results.append(result)
-
-    for y in range(len(data)):
-        energy_map = [[0 for _ in range(len(data[0]))] for _ in range(len(data))]
-        traverse((len(data[0]), y), (-1, 0), grid, energy_map, [])
-
-        result = 0
-        for row in energy_map:
-            for node in row:
-                if node > 0:
-                    result += 1
-
-        results.append(result)
+        energized_tiles = set()
+        results.append(shine_beam((n_cols, y), (-1, 0), grid, energized_tiles, []))
 
     return max(results)
 
 
-measure_performance("part 1", part1, data)
-print(
-    f"Part 2 answer: \033[92m{part2(data)}\x1b[0m. Too slow for performance measurement.\n"
-)
+if __name__ == "__main__":
+    inp = read_input()
+
+    measure_performance("part 1", part1, inp)
+    print(
+        f"Part 2 answer: \033[92m{part2(inp)}\x1b[0m. Too slow for performance measurement.\n"
+    )
